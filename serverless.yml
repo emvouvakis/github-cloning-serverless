@@ -23,6 +23,7 @@ functions:
     environment:
       SNS_ARN: arn:aws:sns:${self:provider.region}:${aws:accountId}:update
       GITHUB_TOKEN: <REPLACE_WITH_YOUR_GITHUB_TOKEN> # Use the GitHub token you have created 
+      GITHUB_USER: <REPLACE_WITH_YOUR_GITHUB_USER> # Use your GitHub username
       
 resources:
   Resources:

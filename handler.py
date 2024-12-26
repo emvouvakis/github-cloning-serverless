@@ -8,10 +8,12 @@ import requests
 import os
 
 def handler(event, context):
-    
-    github_user = 'emvouvakis'
+
+    # Replace with your perfsonan List of repos to check
     repos = ['Encrypto','ChronoVault','Portfolio','streamlit-navbar-responsive-logo'
-             ,'emvouvakis','FlightForecast','FuelPricesGreece','AnalysisAIS','fastapi-sqlite-demo', 'Vroom','FuelPricesGreeceAPI']
+             ,'emvouvakis','FlightForecast','FuelPricesGreece','AnalysisAIS',
+             'fastapi-sqlite-demo', 'Vroom','FuelPricesGreeceAPI', 'github-cloning-serverless']
+             
 
     headers = {
         'Accept': 'application/vnd.github+json',
@@ -23,7 +25,7 @@ def handler(event, context):
 
     # Send requests to github for all repos
     for repo in repos:
-      url = f'https://api.github.com/repos/{github_user}/{repo}/traffic/clones'
+      url = f'https://api.github.com/repos/{os.getenv('GITHUB_USER')}/{repo}/traffic/clones'
       response = requests.get(url, headers=headers)
 
       if response.status_code == 200:
