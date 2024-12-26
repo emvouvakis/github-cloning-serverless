@@ -1,0 +1,62 @@
+service: github-cloning
+
+frameworkVersion: '4.4.18'
+
+provider:
+  name: aws
+  runtime: python3.12
+  region: eu-west-3
+  stackName: github-cloning
+  stage: v1
+  deploymentBucket:
+    name: github-cloning-bucket
+  iam: 
+    role: arn:aws:iam::${aws:accountId}:role/administrator-role # Use IAM role with necessary permissions
+
+functions:
+  lambda:
+    name: github-cloning-lambda
+    handler: handler.handler
+    events:
+      - schedule: rate(14 days)
+    timeout: 20
+    environment:
+      SNS_ARN: arn:aws:sns:${self:provider.region}:${aws:accountId}:update
+      GITHUB_TOKEN: <REPLACE_WITH_YOUR_GITHUB_TOKEN> # Use the GitHub token you have created 
+      
+resources:
+  Resources:
+    table:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: github-cloning-table
+        ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+        AttributeDefinitions:
+          -
+            AttributeName: "Repo"
+            AttributeType: "S"
+        KeySchema:
+          -
+            AttributeName: "Repo"
+            KeyType: "HASH"
+
+# Custom settings for the serverless-python-requirements plugin
+custom:
+  pythonRequirements:
+    useDownloadCache: false
+    useStaticCache: false
+    slim: true
+    zip: true
+
+# Exclude specific files and directories from the deployment package
+package:
+  exclude:
+    - node_modules/**
+    - README.md
+    - .gitignore
+
+# List of plugins to be used with this Serverless service
+plugins:
+  - serverless-python-requirements
