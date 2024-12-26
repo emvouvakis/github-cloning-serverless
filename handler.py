@@ -9,7 +9,7 @@ import os
 
 def handler(event, context):
 
-    # Replace with your perfsonan List of repos to check
+    # Replace with your personal list of repos to check
     repos = ['Encrypto','ChronoVault','Portfolio','streamlit-navbar-responsive-logo'
              ,'emvouvakis','FlightForecast','FuelPricesGreece','AnalysisAIS',
              'fastapi-sqlite-demo', 'Vroom','FuelPricesGreeceAPI', 'github-cloning-serverless']
